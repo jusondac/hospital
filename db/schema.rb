@@ -10,7 +10,47 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_23_074340) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_23_075233) do
+  create_table "doctors", force: :cascade do |t|
+    t.string "name"
+    t.string "gender"
+    t.string "specialization"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "nurses", force: :cascade do |t|
+    t.string "name"
+    t.string "gender"
+    t.string "specialization"
+    t.integer "doctor_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["doctor_id"], name: "index_nurses_on_doctor_id"
+  end
+
+  create_table "patients", force: :cascade do |t|
+    t.string "name"
+    t.string "gender"
+    t.integer "age"
+    t.string "condition"
+    t.integer "room_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["room_id"], name: "index_patients_on_room_id"
+  end
+
+  create_table "rooms", force: :cascade do |t|
+    t.string "room_number"
+    t.string "room_type"
+    t.integer "doctor_id"
+    t.integer "nurse_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["doctor_id"], name: "index_rooms_on_doctor_id"
+    t.index ["nurse_id"], name: "index_rooms_on_nurse_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "ip_address"
@@ -28,5 +68,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_23_074340) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "nurses", "doctors"
+  add_foreign_key "patients", "rooms"
+  add_foreign_key "rooms", "doctors"
+  add_foreign_key "rooms", "nurses"
   add_foreign_key "sessions", "users"
 end

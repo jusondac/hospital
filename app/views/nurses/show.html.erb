@@ -1,0 +1,105 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-gray-900 min-h-screen">
+  <div class="bg-gray-800 shadow overflow-hidden sm:rounded-lg">
+    <div class="px-4 py-5 sm:px-6">
+      <h3 class="text-lg leading-6 font-medium text-gray-100">Nurse Information</h3>
+      <p class="mt-1 max-w-2xl text-sm text-gray-400">Personal details and assigned rooms</p>
+    </div>
+    <div class="border-t border-gray-700">
+      <dl>
+        <div class="bg-gray-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-400">Full name</dt>
+          <dd class="mt-1 text-sm text-gray-100 sm:mt-0 sm:col-span-2"><%= @nurse.name %></dd>
+        </div>
+        <div class="bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-400">Gender</dt>
+          <dd class="mt-1 text-sm text-gray-100 sm:mt-0 sm:col-span-2"><%= @nurse.gender %></dd>
+        </div>
+        <div class="bg-gray-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-400">Specialization</dt>
+          <dd class="mt-1 text-sm text-gray-100 sm:mt-0 sm:col-span-2"><%= @nurse.specialization %></dd>
+        </div>
+        <div class="bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-400">Assigned Doctor</dt>
+          <dd class="mt-1 text-sm text-gray-100 sm:mt-0 sm:col-span-2">
+            <% if @nurse.doctor %>
+              <%= link_to @nurse.doctor.name, doctor_path(@nurse.doctor), class: "text-indigo-400 hover:text-indigo-200" %>
+            <% else %>
+              <span class="text-gray-400">Not assigned to any doctor</span>
+            <% end %>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+  <div class="mt-8 bg-gray-800 shadow overflow-hidden sm:rounded-lg">
+    <div class="px-4 py-5 sm:px-6">
+      <h3 class="text-lg leading-6 font-medium text-gray-100">Assigned Rooms</h3>
+      <p class="mt-1 max-w-2xl text-sm text-gray-400">List of rooms this nurse is responsible for</p>
+    </div>
+    <% if @nurse.rooms.empty? %>
+      <div class="p-4 border-t border-gray-700 text-center text-gray-400">
+        No rooms assigned to this nurse.
+      </div>
+    <% else %>
+      <table class="min-w-full divide-y divide-gray-700">
+        <thead class="bg-gray-900">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Room Number</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Room Type</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Patient</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-gray-800 divide-y divide-gray-700">
+          <% @nurse.rooms.each do |room| %>
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-medium text-gray-100"><%= room.room_number %></div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-100"><%= room.room_type %></div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-100">
+                  <% if room.patient %>
+                    <%= link_to room.patient.name, patient_path(room.patient), class: "text-indigo-400 hover:text-indigo-200" %>
+                  <% else %>
+                    <span class="text-gray-400">No patient</span>
+                  <% end %>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <% if room.available? %>
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-900 text-green-300">Available</span>
+                <% else %>
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-900 text-red-300">Occupied</span>
+                <% end %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <%= link_to "View", room_path(room), class: "text-indigo-400 hover:text-indigo-200" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+  <div class="mt-8 flex justify-between">
+    <%= link_to "Back to Nurses", nurses_path, class: "text-indigo-400 hover:text-indigo-200" %>
+    <div class="flex space-x-2">
+      <%= link_to edit_nurse_path(@nurse), class: "inline-flex items-center gap-2 px-4 py-2 border border-indigo-700 text-sm font-semibold rounded-lg text-indigo-200 bg-indigo-800 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 mr-3 transition-colors duration-150" do %>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a4 4 0 01-1.414.828l-4.243 1.415 1.415-4.243a4 4 0 01.828-1.414z"/>
+        </svg>
+        Edit
+      <% end %>
+      <%= button_to nurse_path(@nurse), method: :delete, data: { confirm: "Are you sure?" }, class: "inline-flex items-center gap-2 px-4 py-2 border border-red-800 text-sm font-semibold rounded-lg text-red-200 bg-red-800 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors duration-150" do %>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+        Delete
+      <% end %>
+    </div>
+  </div>
+</div>

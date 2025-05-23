@@ -1,0 +1,49 @@
+<div class="max-w-2xl mx-auto px-6 py-10 bg-gray-900 rounded-xl shadow-lg">
+  <div class="mb-8">
+    <h1 class="font-extrabold text-4xl text-white tracking-tight">Add New Doctor</h1>
+    <p class="text-gray-400 mt-2">Fill in the details below to add a new doctor to the system.</p>
+  </div>
+  <div class="bg-gray-800 shadow rounded-lg p-8">
+    <%= form_with(model: @doctor, local: true) do |form| %>
+      <% if @doctor.errors.any? %>
+        <div class="bg-red-900/70 p-4 rounded mb-6 border border-red-700">
+          <div class="font-semibold text-red-300">
+            <%= pluralize(@doctor.errors.count, "error") %> prohibited this doctor from being saved:
+          </div>
+          <ul class="mt-3 list-disc list-inside text-sm text-red-200">
+            <% @doctor.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <div class="mb-6">
+        <%= form.label :name, class: "block text-sm font-semibold text-gray-200 mb-2" %>
+        <%= form.text_field :name, class: "shadow-sm focus:ring-indigo-400 focus:border-indigo-400 block w-full sm:text-sm border-gray-700 bg-gray-900 text-white rounded-md px-4 py-2" %>
+      </div>
+      <div class="mb-6">
+        <%= form.label :gender, class: "block text-sm font-semibold text-gray-200 mb-2" %>
+        <div class="flex items-center space-x-8">
+          <div class="flex items-center">
+            <%= form.radio_button :gender, 'male', class: "focus:ring-indigo-400 h-4 w-4 text-indigo-400 border-gray-700 bg-gray-900" %>
+            <%= form.label :gender_male, 'Male', class: "ml-2 block text-sm text-gray-300" %>
+          </div>
+          <div class="flex items-center">
+            <%= form.radio_button :gender, 'female', class: "focus:ring-indigo-400 h-4 w-4 text-indigo-400 border-gray-700 bg-gray-900" %>
+            <%= form.label :gender_female, 'Female', class: "ml-2 block text-sm text-gray-300" %>
+          </div>
+        </div>
+      </div>
+      <div class="mb-8">
+        <%= form.label :specialization, class: "block text-sm font-semibold text-gray-200 mb-2" %>
+        <%= form.text_field :specialization, class: "shadow-sm focus:ring-indigo-400 focus:border-indigo-400 block w-full sm:text-sm border-gray-700 bg-gray-900 text-white rounded-md px-4 py-2" %>
+      </div>
+      <div class="flex justify-end">
+        <%= form.submit "Create Doctor", class: "inline-flex items-center px-6 py-2 border border-transparent text-base font-semibold rounded-lg shadow text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400 transition" %>
+      </div>
+    <% end %>
+  </div>
+  <div class="mt-10 text-center">
+    <%= link_to "← Back to Doctors", doctors_path, class: "text-indigo-400 hover:text-indigo-200 font-medium transition" %>
+  </div>
+</div>

@@ -1,0 +1,54 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-gray-900 min-h-screen">
+  <div class="mb-6">
+    <h1 class="font-bold text-3xl text-white">Edit Room</h1>
+  </div>
+  <div class="bg-gray-800 shadow-lg rounded-xl p-8 border border-gray-700">
+    <%= form_with(model: @room, local: true) do |form| %>
+      <% if @room.errors.any? %>
+        <div class="bg-red-900/70 p-4 rounded mb-6 border border-red-700">
+          <div class="font-medium text-red-300">
+            <%= pluralize(@room.errors.count, "error") %> prohibited this room from being saved:
+          </div>
+          <ul class="mt-3 list-disc list-inside text-sm text-red-200">
+            <% @room.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <div class="mb-6">
+        <%= form.label :room_number, class: "block text-sm font-medium text-gray-300 mb-1" %>
+      <%= form.text_field :room_number, class: "shadow-sm focus:ring-indigo-400 focus:border-indigo-400 block w-full sm:text-sm border-gray-700 bg-gray-900 text-gray-100 rounded-md placeholder-gray-500 px-3 py-2" %>
+      </div>
+      <div class="mb-6">
+        <%= form.label :room_type, class: "block text-sm font-medium text-gray-300 mb-1" %>
+        <%= form.select :room_type, 
+                        [
+                          ['General Ward', 'General Ward'], 
+                          ['Private Room', 'Private Room'], 
+                          ['ICU', 'ICU'], 
+                          ['Operating Room', 'Operating Room'],
+                          ['Emergency Room', 'Emergency Room']
+                        ], 
+                        { include_blank: "-- Select Room Type --" }, 
+                        class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-700 bg-gray-900 text-gray-100 focus:outline-none focus:ring-indigo-400 focus:border-indigo-400 sm:text-sm rounded-md placeholder-gray-500 px-3" %>
+      </div>
+      <div class="mb-6">
+        <%= form.label :doctor_id, "Assign Doctor", class: "block text-sm font-medium text-gray-300 mb-1" %>
+        <%= form.collection_select :doctor_id, @doctors, :id, :name, { include_blank: "-- Select a doctor --" }, class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-700 bg-gray-900 text-gray-100 focus:outline-none focus:ring-indigo-400 focus:border-indigo-400 sm:text-sm rounded-md placeholder-gray-500 px-3" %>
+        <p class="mt-1 text-sm text-gray-500">Optional: You can leave this unassigned</p>
+      </div>
+      <div class="mb-6">
+        <%= form.label :nurse_id, "Assign Nurse", class: "block text-sm font-medium text-gray-300 mb-1" %>
+        <%= form.collection_select :nurse_id, @nurses, :id, :name, { include_blank: "-- Select a nurse --" }, class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-700 bg-gray-900 text-gray-100 focus:outline-none focus:ring-indigo-400 focus:border-indigo-400 sm:text-sm rounded-md placeholder-gray-500 px-3" %>
+        <p class="mt-1 text-sm text-gray-500">Optional: You can leave this unassigned</p>
+      </div>
+      <div class="flex justify-end">
+        <%= form.submit "Update Room", class: "inline-flex items-center px-6 py-2 border border-transparent text-sm font-semibold rounded-lg shadow-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400 transition" %>
+      </div>
+    <% end %>
+  </div>
+  <div class="mt-8">
+    <%= link_to "Back to Room", room_path(@room), class: "text-indigo-400 hover:text-indigo-200 font-semibold transition" %>
+  </div>
+</div>

@@ -69,3 +69,5 @@ gem "ransack", "~> 4.3"
 
 gem "byebug", "~> 12.0"
 gem "awesome_print", "~> 1.9"
+
+gem "faker", "~> 3.5"

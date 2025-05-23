@@ -1,0 +1,82 @@
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <div class="bg-gray-900 shadow-lg rounded-xl border border-gray-800">
+    <div class="px-6 py-6 border-b border-gray-800">
+      <h3 class="text-2xl font-semibold text-white">Patient Information</h3>
+      <p class="mt-2 text-sm text-gray-400">Personal details and room assignment</p>
+    </div>
+    <div>
+      <dl>
+        <div class="px-6 py-5 grid grid-cols-3 gap-4 border-b border-gray-800">
+          <dt class="text-sm font-medium text-gray-400 col-span-1">Full name</dt>
+          <dd class="text-sm text-white col-span-2"><%= @patient.name %></dd>
+        </div>
+        <div class="px-6 py-5 grid grid-cols-3 gap-4 border-b border-gray-800">
+          <dt class="text-sm font-medium text-gray-400 col-span-1">Gender</dt>
+          <dd class="text-sm text-white col-span-2"><%= @patient.gender %></dd>
+        </div>
+        <div class="px-6 py-5 grid grid-cols-3 gap-4 border-b border-gray-800">
+          <dt class="text-sm font-medium text-gray-400 col-span-1">Age</dt>
+          <dd class="text-sm text-white col-span-2"><%= @patient.age %></dd>
+        </div>
+        <div class="px-6 py-5 grid grid-cols-3 gap-4 border-b border-gray-800">
+          <dt class="text-sm font-medium text-gray-400 col-span-1">Condition</dt>
+          <dd class="text-sm text-white col-span-2"><%= @patient.condition %></dd>
+        </div>
+        <div class="px-6 py-5 grid grid-cols-3 gap-4">
+          <dt class="text-sm font-medium text-gray-400 col-span-1">Room Assignment</dt>
+          <dd class="text-sm text-white col-span-2">
+            <% if @patient.room %>
+              <%= link_to "Room #{@patient.room.room_number}", room_path(@patient.room), class: "text-blue-400 hover:underline" %>
+              <span class="ml-2 text-gray-500">(<%= @patient.room.room_type %>)</span>
+            <% else %>
+              <span class="text-yellow-400">Not assigned to any room</span>
+            <% end %>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+
+  <% if @patient.room %>
+    <div class="mt-8 bg-gray-900 shadow-lg rounded-xl border border-gray-800">
+      <div class="px-6 py-6 border-b border-gray-800">
+        <h3 class="text-2xl font-semibold text-white">Care Team</h3>
+        <p class="mt-2 text-sm text-gray-400">Medical staff responsible for this patient</p>
+      </div>
+      <div>
+        <dl>
+          <div class="px-6 py-5 grid grid-cols-3 gap-4 border-b border-gray-800">
+            <dt class="text-sm font-medium text-gray-400 col-span-1">Doctor</dt>
+            <dd class="text-sm text-white col-span-2">
+              <% if @patient.room.doctor %>
+                <%= link_to @patient.room.doctor.name, doctor_path(@patient.room.doctor), class: "text-blue-400 hover:underline" %>
+                <span class="ml-2 text-gray-500">(<%= @patient.room.doctor.specialization %>)</span>
+              <% else %>
+                <span class="text-gray-500">No doctor assigned</span>
+              <% end %>
+            </dd>
+          </div>
+          <div class="px-6 py-5 grid grid-cols-3 gap-4">
+            <dt class="text-sm font-medium text-gray-400 col-span-1">Nurse</dt>
+            <dd class="text-sm text-white col-span-2">
+              <% if @patient.room.nurse %>
+                <%= link_to @patient.room.nurse.name, nurse_path(@patient.room.nurse), class: "text-blue-400 hover:underline" %>
+                <span class="ml-2 text-gray-500">(<%= @patient.room.nurse.specialization %>)</span>
+              <% else %>
+                <span class="text-gray-500">No nurse assigned</span>
+              <% end %>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="mt-10 flex flex-col sm:flex-row justify-between items-center gap-4">
+    <%= link_to "Back to Patients", patients_path, class: "text-blue-400 hover:underline text-sm" %>
+    <div class="flex gap-2">
+      <%= link_to "Edit", edit_patient_path(@patient), class: "px-4 py-2 rounded-lg text-sm font-medium bg-gray-800 text-blue-300 hover:bg-gray-700 hover:text-white transition" %>
+      <%= button_to "Delete", patient_path(@patient), method: :delete, data: { confirm: "Are you sure?" }, class: "px-4 py-2 rounded-lg text-sm font-medium bg-red-600 text-white hover:bg-red-700 transition" %>
+    </div>
+  </div>
+</div>
