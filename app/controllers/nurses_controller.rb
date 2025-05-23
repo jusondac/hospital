@@ -5,7 +5,7 @@ class NursesController < ApplicationController
     @q = Nurse.ransack(params[:q])
     @q.sorts = "created_at desc" if @q.sorts.empty?
 
-    @pagy, @nurses = pagy(@q.result(distinct: true), items: 10)
+    @pagy, @nurses = pagy(@q.result(distinct: true), limit: 8)
   end
 
   def show

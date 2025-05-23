@@ -1,109 +1,103 @@
-<div class="max-w-4xl mx-auto px-4 py-10">
-  <div class="bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl transition-all duration-300">
-    <div class="px-6 py-6 border-b border-gray-700 flex justify-between items-center">
+<div class="max-w-4xl mx-auto px-4 py-10 space-y-12">
+  <!-- Room Information -->
+  <section>
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6">
       <div>
-        <h3 class="text-2xl font-extrabold text-white tracking-tight">Room Information</h3>
-        <p class="mt-1 text-sm text-gray-400">Details and assignments</p>
+        <h2 class="text-3xl font-bold text-white">Room <span class="text-blue-400">#<%= @room.room_number %></span></h2>
+        <p class="text-gray-400 text-sm mt-1">Details and assignments</p>
       </div>
       <div>
         <% if @room.available? %>
-          <span class="px-3 py-1 text-xs font-semibold rounded-full bg-green-700/20 text-green-400 border border-green-700 shadow-sm">Available</span>
+          <span class="px-4 py-1 text-xs font-semibold rounded-full bg-green-900 text-green-300 border border-green-700">Available</span>
         <% else %>
-          <span class="px-3 py-1 text-xs font-semibold rounded-full bg-red-700/20 text-red-400 border border-red-700 shadow-sm">Occupied</span>
+          <span class="px-4 py-1 text-xs font-semibold rounded-full bg-red-900 text-red-300 border border-red-700">Occupied</span>
         <% end %>
       </div>
     </div>
-    <dl>
-      <div class="flex flex-col sm:flex-row sm:items-center px-6 py-4 border-b border-gray-700">
-        <dt class="w-40 text-sm text-gray-400">Room Number</dt>
-        <dd class="text-base text-white font-semibold tracking-wide"><%= @room.room_number %></dd>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div>
+        <div class="text-gray-400 text-xs uppercase tracking-wider mb-1">Room Type</div>
+        <div class="text-white text-lg font-semibold"><%= @room.room_type %></div>
       </div>
-      <div class="flex flex-col sm:flex-row sm:items-center px-6 py-4">
-        <dt class="w-40 text-sm text-gray-400">Room Type</dt>
-        <dd class="text-base text-white font-semibold tracking-wide"><%= @room.room_type %></dd>
-      </div>
-    </dl>
-  </div>
-
-  <div class="mt-8 bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl transition-all duration-300">
-    <div class="px-6 py-6 border-b border-gray-700">
-      <h3 class="text-2xl font-extrabold text-white tracking-tight">Staff Assignment</h3>
-      <p class="mt-1 text-sm text-gray-400">Medical staff responsible for this room</p>
     </div>
-    <dl>
-      <div class="flex flex-col sm:flex-row sm:items-center px-6 py-4 border-b border-gray-700">
-        <dt class="w-40 text-sm text-gray-400">Doctor</dt>
-        <dd class="text-base text-white font-semibold">
+  </section>
+
+  <!-- Staff Assignment -->
+  <section>
+    <h3 class="text-xl font-bold text-white mb-4">Staff Assignment</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div>
+        <div class="text-gray-400 text-xs uppercase tracking-wider mb-1">Doctor</div>
+        <div class="text-white font-semibold">
           <% if @room.doctor %>
             <%= link_to @room.doctor.name, doctor_path(@room.doctor), class: "text-blue-400 hover:underline hover:text-blue-300 transition" %>
             <span class="ml-2 text-gray-400 text-sm">(<%= @room.doctor.specialization %>)</span>
           <% else %>
             <span class="text-gray-500">No doctor assigned</span>
           <% end %>
-        </dd>
+        </div>
       </div>
-      <div class="flex flex-col sm:flex-row sm:items-center px-6 py-4">
-        <dt class="w-40 text-sm text-gray-400">Nurse</dt>
-        <dd class="text-base text-white font-semibold">
+      <div>
+        <div class="text-gray-400 text-xs uppercase tracking-wider mb-1">Nurse</div>
+        <div class="text-white font-semibold">
           <% if @room.nurse %>
             <%= link_to @room.nurse.name, nurse_path(@room.nurse), class: "text-blue-400 hover:underline hover:text-blue-300 transition" %>
             <span class="ml-2 text-gray-400 text-sm">(<%= @room.nurse.specialization %>)</span>
           <% else %>
             <span class="text-gray-500">No nurse assigned</span>
           <% end %>
-        </dd>
+        </div>
       </div>
-    </dl>
-  </div>
-
-  <div class="mt-8 bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl transition-all duration-300">
-    <div class="px-6 py-6 border-b border-gray-700">
-      <h3 class="text-2xl font-extrabold text-white tracking-tight">Patient Information</h3>
-      <p class="mt-1 text-sm text-gray-400">Current patient in this room</p>
     </div>
+  </section>
+
+  <!-- Patient Information -->
+  <section>
+    <h3 class="text-xl font-bold text-white mb-4">Patient Information</h3>
     <% if @room.patient %>
-      <dl>
-        <div class="flex flex-col sm:flex-row sm:items-center px-6 py-4 border-b border-gray-700">
-          <dt class="w-40 text-sm text-gray-400">Name</dt>
-          <dd class="text-base text-white font-semibold">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <div class="text-gray-400 text-xs uppercase tracking-wider mb-1">Name</div>
+          <div class="text-white font-semibold">
             <%= link_to @room.patient.name, patient_path(@room.patient), class: "text-blue-400 hover:underline hover:text-blue-300 transition" %>
-          </dd>
+          </div>
         </div>
-        <div class="flex flex-col sm:flex-row sm:items-center px-6 py-4 border-b border-gray-700">
-          <dt class="w-40 text-sm text-gray-400">Gender</dt>
-          <dd class="text-base text-white font-semibold"><%= @room.patient.gender %></dd>
+        <div>
+          <div class="text-gray-400 text-xs uppercase tracking-wider mb-1">Gender</div>
+          <div class="text-white font-semibold"><%= @room.patient.gender %></div>
         </div>
-        <div class="flex flex-col sm:flex-row sm:items-center px-6 py-4 border-b border-gray-700">
-          <dt class="w-40 text-sm text-gray-400">Age</dt>
-          <dd class="text-base text-white font-semibold"><%= @room.patient.age %></dd>
+        <div>
+          <div class="text-gray-400 text-xs uppercase tracking-wider mb-1">Age</div>
+          <div class="text-white font-semibold"><%= @room.patient.age %></div>
         </div>
-        <div class="flex flex-col sm:flex-row sm:items-center px-6 py-4">
-          <dt class="w-40 text-sm text-gray-400">Condition</dt>
-          <dd class="text-base text-white font-semibold"><%= @room.patient.condition %></dd>
+        <div>
+          <div class="text-gray-400 text-xs uppercase tracking-wider mb-1">Condition</div>
+          <div class="text-white font-semibold"><%= @room.patient.condition %></div>
         </div>
-      </dl>
+      </div>
     <% else %>
-      <div class="px-6 py-10 text-center text-gray-500">
+      <div class="py-8 text-center text-gray-500">
         <p class="text-sm">No patient is currently assigned to this room.</p>
       </div>
     <% end %>
-  </div>
+  </section>
 
-  <div class="mt-10 flex flex-col sm:flex-row justify-between gap-4">
-    <%= link_to rooms_path, class: "inline-flex items-center px-4 py-2 border border-gray-700 text-sm font-medium rounded-lg text-gray-200 bg-gray-800 hover:bg-gray-700 hover:text-white transition" do %>
+  <!-- Actions -->
+  <div class="flex flex-col sm:flex-row justify-between gap-4 pt-8 border-t border-gray-700">
+    <%= link_to rooms_path, class: "inline-flex items-center px-4 py-2 border border-gray-700 text-sm font-medium rounded-lg text-gray-200 bg-transparent hover:bg-gray-700 hover:text-white transition" do %>
       <svg class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" clip-rule="evenodd" />
       </svg>
       Back to Rooms
     <% end %>
     <div class="flex gap-3">
-      <%= link_to edit_room_path(@room), class: "inline-flex items-center px-4 py-2 border border-blue-900 text-sm font-medium rounded-lg text-blue-400 bg-blue-900/20 hover:bg-blue-900/40 hover:text-blue-200 transition" do %>
+      <%= link_to edit_room_path(@room), class: "inline-flex items-center px-4 py-2 border border-blue-900 text-sm font-medium rounded-lg text-blue-400 bg-transparent hover:bg-blue-900/20 hover:text-blue-200 transition" do %>
         <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
         </svg>
         Edit Room
       <% end %>
-      <%= button_to room_path(@room), method: :delete, data: { confirm: "Are you sure you want to delete this room?" }, class: "inline-flex items-center px-4 py-2 border border-red-900 text-sm font-medium rounded-lg text-red-400 bg-red-900/20 hover:bg-red-900/40 hover:text-red-200 transition" do %>
+      <%= button_to room_path(@room), method: :delete, data: { confirm: "Are you sure you want to delete this room?" }, class: "inline-flex items-center px-4 py-2 border border-red-900 text-sm font-medium rounded-lg text-red-400 bg-transparent hover:bg-red-900/20 hover:text-red-200 transition" do %>
         <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
         </svg>

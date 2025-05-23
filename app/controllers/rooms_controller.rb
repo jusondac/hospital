@@ -3,7 +3,7 @@ class RoomsController < ApplicationController
 
   def index
     @q = Room.ransack(params[:q])
-    @pagy, @rooms = pagy(@q.result(distinct: true), limit: 10)
+    @pagy, @rooms = pagy(@q.result(distinct: true), limit: 8)
   end
 
   def show
