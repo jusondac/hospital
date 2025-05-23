@@ -18,6 +18,7 @@ module Authentication
     end
 
     def require_authentication
+      return true if request.path.start_with?("/api/charts/")  # Skip auth for chart API endpoints
       resume_session || request_authentication
     end
 

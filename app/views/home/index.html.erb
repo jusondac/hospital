@@ -1,5 +1,19 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" data-controller="chart">
   <h1 class="font-bold text-4xl mb-12 text-center text-gray-900 dark:text-white">Hospital Management System</h1>
+  <!-- Dashboard Analytics Section -->
+  <div class="mb-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-xl p-6">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Patient Admissions</h2>
+      <p class="text-gray-600 dark:text-gray-300 mb-4">Weekly patient admissions</p>
+      <div data-chart-target="patientChart" class="w-full h-[200px]"></div>
+    </div>
+    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-xl p-6">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Doctor Specialties</h2>
+      <p class="text-gray-600 dark:text-gray-300 mb-4">Distribution by department</p>
+      <div data-chart-target="doctorChart" class="w-full h-[200px]"></div>
+    </div>
+  </div>
+  <!-- Main Navigation Cards -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-xl transition duration-300 hover:shadow-md">
       <div class="px-6 py-6">
