@@ -2,7 +2,8 @@ class RoomsController < ApplicationController
   before_action :set_room, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @rooms = Room.all
+    @q = Room.ransack(params[:q])
+    @pagy, @rooms = pagy(@q.result(distinct: true), limit: 10)
   end
 
   def show

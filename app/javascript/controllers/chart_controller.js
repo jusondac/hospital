@@ -41,10 +41,30 @@ export default class extends Controller {
         colors: ['#4f46e5'],
         stroke: {
           curve: 'smooth',
-          width: 2
+          width: 4
         },
         xaxis: {
-          categories: chartData.labels
+          categories: chartData.labels,
+          labels: {
+            style: {
+              colors: '#6b7280',
+              fontSize: '12px',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 400,
+              cssClass: 'apexcharts-xaxis-label'
+            }
+          }
+        },
+        yaxis: {
+          labels: {
+            style: {
+              colors: '#6b7280',
+              fontSize: '12px',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 400,
+              cssClass: 'apexcharts-yaxis-label'
+            }
+          }
         },
         tooltip: {
           theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light'
@@ -132,7 +152,11 @@ export default class extends Controller {
         colors: ['#4f46e5', '#3b82f6', '#8b5cf6', '#ec4899', '#10b981'],
         labels: chartData.labels,
         legend: {
-          position: 'bottom'
+          position: 'bottom',
+          labels: {
+            colors: '#6b7280', // Change legend label color
+            useSeriesColors: false
+          }
         },
         dataLabels: {
           enabled: false
