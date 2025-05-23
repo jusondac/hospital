@@ -75,7 +75,9 @@ GEM
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     ast (2.4.3)
+    awesome_print (1.9.2)
     base64 (0.2.0)
+    bcrypt (3.1.20)
     bcrypt_pbkdf (1.1.1)
     benchmark (0.4.0)
     bigdecimal (3.1.9)
@@ -85,6 +87,7 @@ GEM
     brakeman (7.0.2)
       racc
     builder (3.3.0)
+    byebug (12.0.0)
     capybara (3.40.0)
       addressable
       matrix
@@ -173,6 +176,7 @@ GEM
     nokogiri (1.18.8-x86_64-linux-gnu)
       racc (~> 1.4)
     ostruct (0.6.1)
+    pagy (9.3.4)
     parallel (1.27.0)
     parser (3.3.8.0)
       ast (~> 2.4.1)
@@ -233,6 +237,10 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.2.1)
+    ransack (4.3.0)
+      activerecord (>= 6.1.5)
+      activesupport (>= 6.1.5)
+      i18n
     rdoc (6.14.0)
       erb
       psych (>= 4.0.0)
@@ -339,16 +347,21 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  awesome_print (~> 1.9)
+  bcrypt (~> 3.1.7)
   bootsnap
   brakeman
+  byebug (~> 12.0)
   capybara
   debug
   importmap-rails
   jbuilder
   kamal
+  pagy (~> 9.3)
   propshaft
   puma (>= 5.0)
   rails (~> 8.0.2)
+  ransack (~> 4.3)
   rubocop-rails-omakase
   selenium-webdriver
   solid_cable
