@@ -1,5 +1,5 @@
 class DoctorsController < ApplicationController
-  before_action :set_doctor, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_doctor, only: [ :show, :edit, :update, :destroy, :assign_nurse, :unassign_nurse ]
 
   def index
     @q = Doctor.ransack(params[:q])
@@ -10,6 +10,7 @@ class DoctorsController < ApplicationController
 
   def show
     # @doctor is set by the before_action
+    @pagy, @available_nurses = pagy(Nurse.available, limit: 4)
   end
 
   def new
@@ -41,6 +42,26 @@ class DoctorsController < ApplicationController
   def destroy
     @doctor.destroy
     redirect_to doctors_path, notice: "Doctor was successfully destroyed."
+  end
+
+  def assign_nurse
+    @nurse = Nurse.find(params[:nurse_id])
+
+    if @nurse.update(doctor: @doctor)
+      redirect_to @doctor, notice: "Nurse #{@nurse.name} was successfully assigned to this doctor."
+    else
+      redirect_to @doctor, alert: "Failed to assign nurse. Please try again."
+    end
+  end
+
+  def unassign_nurse
+    @nurse = Nurse.find(params[:nurse_id])
+
+    if @nurse.update(doctor: nil)
+      redirect_to @doctor, notice: "Nurse #{@nurse.name} was successfully unassigned from this doctor."
+    else
+      redirect_to @doctor, alert: "Failed to unassign nurse. Please try again."
+    end
   end
 
   private

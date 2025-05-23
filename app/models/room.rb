@@ -7,7 +7,11 @@ class Room < ApplicationRecord
   validates :room_type, presence: true
 
   def available?
-    patient.nil?
+    patient.nil? && doctor.nil?
+  end
+
+  def fully_occupied?
+    patient.present? && doctor.present?
   end
 
   def assign_staff(doctor, nurse)

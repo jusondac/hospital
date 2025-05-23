@@ -7,9 +7,18 @@ Rails.application.routes.draw do
   resources :passwords, param: :token
 
   # Hospital resources
-  resources :doctors
+  resources :doctors do
+    member do
+      patch :assign_nurse
+      patch :unassign_nurse
+    end
+  end
   resources :nurses
-  resources :patients
+  resources :patients do
+    member do
+      patch :discharge
+    end
+  end
   resources :rooms
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -24,6 +33,8 @@ Rails.application.routes.draw do
   namespace :api do
     get "charts/patient_admissions"
     get "charts/doctor_specialties"
+    get "doctors/:id/nurses", to: "doctors#nurses"
+    get "nurses/available", to: "nurses#available"
   end
 
   # Defines the root path route ("/")

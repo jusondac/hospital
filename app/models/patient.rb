@@ -10,6 +10,20 @@ class Patient < ApplicationRecord
     room.present?
   end
 
+  def discharge!
+    if room.present?
+      # Clear the patient from the room, making it available
+      update!(room: nil)
+      true
+    else
+      false
+    end
+  end
+
+  def recovered?
+    room.nil?
+  end
+
   # Define which attributes can be searched with Ransack
   def self.ransackable_attributes(auth_object = nil)
     [ "age", "condition", "created_at", "gender", "id", "name", "updated_at" ]
