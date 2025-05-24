@@ -6,6 +6,10 @@ class Patient < ApplicationRecord
   validates :age, presence: true, numericality: { greater_than: 0 }
   validates :condition, presence: true
 
+  # Update room status when patient assignment changes
+  after_save :update_room_status, if: :saved_change_to_room_id?
+  after_destroy :update_old_room_status
+
   def assigned_to_room?
     room.present?
   end
@@ -31,5 +35,24 @@ class Patient < ApplicationRecord
 
   def self.ransackable_associations(auth_object = nil)
     [ "room" ]
+  end
+
+  private
+
+  def update_room_status
+    # Update the new room's status if present
+    room&.send(:update_room_status)
+
+    # Update the old room's status if it changed
+    if saved_change_to_room_id?
+      old_room_id = saved_change_to_room_id[0]
+      old_room = Room.find_by(id: old_room_id)
+      old_room&.send(:update_room_status)
+    end
+  end
+
+  def update_old_room_status
+    # Update room status when patient is destroyed
+    room&.send(:update_room_status)
   end
 end

@@ -24,13 +24,7 @@
       <div class="flex-1">
         <%= form.label :room_type, class: "block text-sm font-medium text-gray-300 mb-1" %>
         <%= form.select :room_type, 
-                        [
-                          ['General Ward', 'General Ward'], 
-                          ['Private Room', 'Private Room'], 
-                          ['ICU', 'ICU'], 
-                          ['Operating Room', 'Operating Room'],
-                          ['Emergency Room', 'Emergency Room']
-                        ], 
+                        options_for_select(Room.room_types.map {|key, value| [key.humanize, key]}, @room.room_type), 
                         { include_blank: "-- Select Room Type --" }, 
                         class: "block w-full border-0 border-b border-gray-700 bg-transparent text-gray-100 focus:ring-indigo-400 focus:border-indigo-400 sm:text-sm rounded-none placeholder-gray-500 px-0 py-2 transition" %>
       </div>

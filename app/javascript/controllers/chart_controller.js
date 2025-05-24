@@ -47,7 +47,7 @@ export default class extends Controller {
           categories: chartData.labels,
           labels: {
             style: {
-              colors: '#6b7280',
+              colors: '#fff',
               fontSize: '12px',
               fontFamily: 'Inter, sans-serif',
               fontWeight: 400,
@@ -58,7 +58,7 @@ export default class extends Controller {
         yaxis: {
           labels: {
             style: {
-              colors: '#6b7280',
+              colors: '#fff',
               fontSize: '12px',
               fontFamily: 'Inter, sans-serif',
               fontWeight: 400,
@@ -154,7 +154,7 @@ export default class extends Controller {
         legend: {
           position: 'bottom',
           labels: {
-            colors: '#6b7280', // Change legend label color
+            colors: '#fff', // Change legend label color
             useSeriesColors: false
           }
         },

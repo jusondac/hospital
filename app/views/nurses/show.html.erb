@@ -50,7 +50,7 @@
             <% @nurse.rooms.each do |room| %>
               <tr class="hover:bg-gray-900 transition">
                 <td class="px-4 py-2 text-gray-100 font-medium"><%= room.room_number %></td>
-                <td class="px-4 py-2 text-gray-100"><%= room.room_type %></td>
+                <td class="px-4 py-2 text-gray-100"><%= room.room_type.humanize %></td>
                 <td class="px-4 py-2">
                   <% if room.patient %>
                     <%= link_to room.patient.name, patient_path(room.patient), class: "text-indigo-400 hover:text-indigo-200 underline" %>

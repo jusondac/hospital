@@ -3,7 +3,20 @@ class RoomsController < ApplicationController
 
   def index
     @q = Room.ransack(params[:q])
-    @pagy, @rooms = pagy(@q.result(distinct: true), limit: 8)
+    rooms = @q.result(distinct: true)
+
+    # Apply room type filter if present
+    if params[:room_type].present?
+      rooms = rooms.where(room_type: params[:room_type])
+    end
+
+    # Apply status filter using the room_status column
+    if params[:status].present?
+      rooms = rooms.where(room_status: params[:status])
+    end
+
+    # Use regular pagy for all database queries
+    @pagy, @rooms = pagy(rooms.includes(:patient, :doctor, :nurse), limit: 8)
   end
 
   def show

@@ -21,7 +21,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
       <div>
         <div class="text-gray-400 text-xs uppercase tracking-wider mb-1">Room Type</div>
-        <div class="text-white text-lg font-semibold"><%= @room.room_type %></div>
+        <div class="text-white text-lg font-semibold"><%= @room.room_type.humanize %></div>
       </div>
     </div>
   </section>
