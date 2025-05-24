@@ -34,7 +34,7 @@ end
 
 # Create nurses
 puts "Creating nurses..."
-15.times do |i|
+50.times do |i|
   Nurse.create!(
     name: Faker::Name.name,
     specialization: [ 'Pediatrics', 'Cardiology', 'Neurology', 'Oncology' ].sample,

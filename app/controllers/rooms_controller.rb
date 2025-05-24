@@ -16,7 +16,7 @@ class RoomsController < ApplicationController
     end
 
     # Use regular pagy for all database queries
-    @pagy, @rooms = pagy(rooms.includes(:patients, :doctor, :nurse), limit: 8)
+    @pagy, @rooms = pagy(rooms.includes(:patients, :doctor, :nurse), limit: 7)
   end
 
   def show
