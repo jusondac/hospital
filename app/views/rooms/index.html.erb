@@ -162,13 +162,20 @@
               </div>
             </td>
             <td class="px-6 py-4">
-              <% if room.doctor %>
-                <%= link_to doctor_path(room.doctor), class: "flex items-center gap-1 text-indigo-600 dark:text-indigo-400 hover:underline" do %>
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-500 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Dr. <%= room.doctor.name %>
-                <% end %>
+              <% if room.doctors.any? %>
+                <div class="space-y-1">
+                  <% room.doctors.limit(2).each do |doctor| %>
+                    <%= link_to doctor_path(doctor), class: "flex items-center gap-1 text-indigo-600 dark:text-indigo-400 hover:underline text-sm" do %>
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-indigo-500 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      Dr. <%= doctor.name %>
+                    <% end %>
+                  <% end %>
+                  <% if room.doctors.count > 2 %>
+                    <div class="text-xs text-gray-500">+<%= room.doctors.count - 2 %> more</div>
+                  <% end %>
+                </div>
               <% else %>
                 <span class="flex items-center gap-1 text-gray-400 dark:text-gray-500">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -179,13 +186,20 @@
               <% end %>
             </td>
             <td class="px-6 py-4">
-              <% if room.nurse %>
-                <%= link_to nurse_path(room.nurse), class: "flex items-center gap-1 text-indigo-600 dark:text-indigo-400 hover:underline" do %>
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-500 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                  </svg>
-                  <%= room.nurse.name %>
-                <% end %>
+              <% if room.nurses.any? %>
+                <div class="space-y-1">
+                  <% room.nurses.limit(2).each do |nurse| %>
+                    <%= link_to nurse_path(nurse), class: "flex items-center gap-1 text-indigo-600 dark:text-indigo-400 hover:underline text-sm" do %>
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-indigo-500 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                      </svg>
+                      <%= nurse.name %>
+                    <% end %>
+                  <% end %>
+                  <% if room.nurses.count > 2 %>
+                    <div class="text-xs text-gray-500">+<%= room.nurses.count - 2 %> more</div>
+                  <% end %>
+                </div>
               <% else %>
                 <span class="flex items-center gap-1 text-gray-400 dark:text-gray-500">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

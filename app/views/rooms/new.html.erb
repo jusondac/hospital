@@ -29,14 +29,26 @@
                         class: "bg-gray-800 border border-gray-700 text-gray-100 focus:ring-indigo-500 focus:border-indigo-500 block w-full px-4 py-2 rounded-lg sm:text-sm transition" %>
       </div>
       <div class="mb-7">
-        <%= form.label :doctor_id, "Assign Doctor", class: "block text-sm font-semibold text-gray-200 mb-2" %>
-        <%= form.collection_select :doctor_id, @doctors, :id, :name, { include_blank: "-- Select a doctor --" }, class: "bg-gray-800 border border-gray-700 text-gray-100 focus:ring-indigo-500 focus:border-indigo-500 block w-full px-4 py-2 rounded-lg sm:text-sm transition" %>
-        <p class="mt-1 text-xs text-gray-400">Optional: You can leave this unassigned</p>
+        <%= form.label :doctor_ids, "Assign Doctors", class: "block text-sm font-semibold text-gray-200 mb-2" %>
+        <%= form.collection_check_boxes :doctor_ids, @doctors, :id, :name do |b| %>
+          <div class="flex items-center space-x-2 mb-2">
+            <%= b.check_box(class: "h-4 w-4 text-indigo-600 bg-gray-800 border-gray-600 rounded focus:ring-indigo-500") %>
+            <%= b.label(class: "text-sm text-gray-300") %>
+            <span class="text-xs text-gray-500">(<%= Doctor.find(b.value).specialization %>)</span>
+          </div>
+        <% end %>
+        <p class="mt-1 text-xs text-gray-400">Optional: Select multiple doctors to assign to this room</p>
       </div>
       <div class="mb-7">
-        <%= form.label :nurse_id, "Assign Nurse", class: "block text-sm font-semibold text-gray-200 mb-2" %>
-        <%= form.collection_select :nurse_id, @nurses, :id, :name, { include_blank: "-- Select a nurse --" }, class: "bg-gray-800 border border-gray-700 text-gray-100 focus:ring-indigo-500 focus:border-indigo-500 block w-full px-4 py-2 rounded-lg sm:text-sm transition" %>
-        <p class="mt-1 text-xs text-gray-400">Optional: You can leave this unassigned</p>
+        <%= form.label :nurse_ids, "Assign Nurses", class: "block text-sm font-semibold text-gray-200 mb-2" %>
+        <%= form.collection_check_boxes :nurse_ids, @nurses, :id, :name do |b| %>
+          <div class="flex items-center space-x-2 mb-2">
+            <%= b.check_box(class: "h-4 w-4 text-indigo-600 bg-gray-800 border-gray-600 rounded focus:ring-indigo-500") %>
+            <%= b.label(class: "text-sm text-gray-300") %>
+            <span class="text-xs text-gray-500">(<%= Nurse.find(b.value).specialization %>)</span>
+          </div>
+        <% end %>
+        <p class="mt-1 text-xs text-gray-400">Optional: Select multiple nurses to assign to this room</p>
       </div>
       <div class="mb-7">
         <%= form.label :capacity, class: "block text-sm font-semibold text-gray-200 mb-2" %>

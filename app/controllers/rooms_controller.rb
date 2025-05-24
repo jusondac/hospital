@@ -16,7 +16,7 @@ class RoomsController < ApplicationController
     end
 
     # Use regular pagy for all database queries
-    @pagy, @rooms = pagy(rooms.includes(:patients, :doctor, :nurse), limit: 7)
+    @pagy, @rooms = pagy(rooms.includes(:patients, :doctors, :nurses), limit: 7)
   end
 
   def show
@@ -34,6 +34,14 @@ class RoomsController < ApplicationController
     @room = Room.new(room_params)
 
     if @room.save
+      # Assign doctors and nurses if selected
+      if params[:room][:doctor_ids].present?
+        @room.doctors = Doctor.where(id: params[:room][:doctor_ids])
+      end
+      if params[:room][:nurse_ids].present?
+        @room.nurses = Nurse.where(id: params[:room][:nurse_ids])
+      end
+      
       redirect_to @room, notice: "Room was successfully created."
     else
       @doctors = Doctor.all
@@ -50,22 +58,20 @@ class RoomsController < ApplicationController
   end
 
   def update
-    # Get the updated room parameters
-    update_params = room_params
-
-    # If a doctor is being assigned and they have nurses, auto-assign the first nurse
-    if update_params[:doctor_id].present?
-      doctor = Doctor.find(update_params[:doctor_id])
-      if doctor.nurses.any? && update_params[:nurse_id].blank?
-        # Only auto-assign if no nurse was manually selected
-        update_params[:nurse_id] = doctor.nurses.first.id
+    if @room.update(room_params)
+      # Update doctor and nurse associations
+      if params[:room][:doctor_ids].present?
+        @room.doctors = Doctor.where(id: params[:room][:doctor_ids])
+      else
+        @room.doctors.clear
       end
-    # If doctor is being removed, also remove the nurse
-    elsif update_params[:doctor_id].blank?
-      update_params[:nurse_id] = nil
-    end
-
-    if @room.update(update_params)
+      
+      if params[:room][:nurse_ids].present?
+        @room.nurses = Nurse.where(id: params[:room][:nurse_ids])
+      else
+        @room.nurses.clear
+      end
+      
       redirect_to @room, notice: "Room was successfully updated."
     else
       @doctors = Doctor.includes(:nurses).all
@@ -86,6 +92,6 @@ class RoomsController < ApplicationController
   end
 
   def room_params
-    params.require(:room).permit(:room_number, :room_type, :doctor_id, :nurse_id, :capacity)
+    params.require(:room).permit(:room_number, :room_type, :capacity, doctor_ids: [], nurse_ids: [])
   end
 end

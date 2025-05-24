@@ -1,6 +1,8 @@
 class Nurse < ApplicationRecord
   belongs_to :doctor, optional: true
-  has_many :rooms
+  # Many-to-many relationship with rooms
+  has_many :room_nurses, dependent: :destroy
+  has_many :rooms, through: :room_nurses
 
   validates :name, presence: true
   validates :gender, presence: true, inclusion: { in: [ "female" ], message: "must be female" }

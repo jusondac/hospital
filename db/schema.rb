@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_24_064816) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_24_121723) do
   create_table "doctors", force: :cascade do |t|
     t.string "name"
     t.string "gender"
@@ -43,17 +43,33 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_24_064816) do
     t.index ["room_id"], name: "index_patients_on_room_id"
   end
 
+  create_table "room_doctors", force: :cascade do |t|
+    t.integer "room_id", null: false
+    t.integer "doctor_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["doctor_id"], name: "index_room_doctors_on_doctor_id"
+    t.index ["room_id", "doctor_id"], name: "index_room_doctors_on_room_id_and_doctor_id", unique: true
+    t.index ["room_id"], name: "index_room_doctors_on_room_id"
+  end
+
+  create_table "room_nurses", force: :cascade do |t|
+    t.integer "room_id", null: false
+    t.integer "nurse_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["nurse_id"], name: "index_room_nurses_on_nurse_id"
+    t.index ["room_id", "nurse_id"], name: "index_room_nurses_on_room_id_and_nurse_id", unique: true
+    t.index ["room_id"], name: "index_room_nurses_on_room_id"
+  end
+
   create_table "rooms", force: :cascade do |t|
     t.string "room_number"
-    t.integer "doctor_id"
-    t.integer "nurse_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "room_type"
     t.integer "room_status"
     t.integer "capacity"
-    t.index ["doctor_id"], name: "index_rooms_on_doctor_id"
-    t.index ["nurse_id"], name: "index_rooms_on_nurse_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -75,7 +91,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_24_064816) do
 
   add_foreign_key "nurses", "doctors"
   add_foreign_key "patients", "rooms"
-  add_foreign_key "rooms", "doctors"
-  add_foreign_key "rooms", "nurses"
+  add_foreign_key "room_doctors", "doctors"
+  add_foreign_key "room_doctors", "rooms"
+  add_foreign_key "room_nurses", "nurses"
+  add_foreign_key "room_nurses", "rooms"
   add_foreign_key "sessions", "users"
 end

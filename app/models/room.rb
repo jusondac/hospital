@@ -1,6 +1,9 @@
 class Room < ApplicationRecord
-  belongs_to :doctor, optional: true
-  belongs_to :nurse, optional: true
+  # Many-to-many relationships
+  has_many :room_doctors, dependent: :destroy
+  has_many :doctors, through: :room_doctors
+  has_many :room_nurses, dependent: :destroy
+  has_many :nurses, through: :room_nurses
   has_many :patients
 
   scope :is_available, -> {
@@ -33,13 +36,24 @@ class Room < ApplicationRecord
   after_save :update_room_status
   after_touch :update_room_status
 
-  def assign_staff(doctor, nurse)
-    if nurse.gender == "female"
-      update(doctor: doctor, nurse: nurse)
-      true
-    else
-      false
+  def assign_staff(doctors_list, nurses_list)
+    # Clear existing associations
+    self.doctors.clear
+    self.nurses.clear
+    
+    # Add new doctors
+    doctors_list.each do |doctor|
+      self.doctors << doctor unless self.doctors.include?(doctor)
     end
+    
+    # Add new nurses (ensure they are female)
+    nurses_list.each do |nurse|
+      if nurse.gender == "female"
+        self.nurses << nurse unless self.nurses.include?(nurse)
+      end
+    end
+    
+    save
   end
 
   def is_available?
@@ -61,11 +75,11 @@ class Room < ApplicationRecord
   def calculate_status
     patient_count = patients.count
 
-    if patient_count >= capacity && doctor.present?
+    if patient_count >= capacity && doctors.any?
       "occupied"
-    elsif patient_count > 0 && doctor.nil?
+    elsif patient_count > 0 && doctors.empty?
       "patient_only"
-    elsif patient_count == 0 && doctor.present?
+    elsif patient_count == 0 && doctors.any?
       "doctor_assigned"
     else
       "available"

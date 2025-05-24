@@ -48,26 +48,38 @@
     <h3 class="text-xl font-bold text-white mb-4">Staff Assignment</h3>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
       <div>
-        <div class="text-gray-400 text-xs uppercase tracking-wider mb-1">Doctor</div>
-        <div class="text-white font-semibold">
-          <% if @room.doctor %>
-            <%= link_to @room.doctor.name, doctor_path(@room.doctor), class: "text-blue-400 hover:underline hover:text-blue-300 transition" %>
-            <span class="ml-2 text-gray-400 text-sm">(<%= @room.doctor.specialization %>)</span>
-          <% else %>
-            <span class="text-gray-500">No doctor assigned</span>
-          <% end %>
-        </div>
+        <div class="text-gray-400 text-xs uppercase tracking-wider mb-3">Assigned Doctors</div>
+        <% if @room.doctors.any? %>
+          <div class="space-y-2">
+            <% @room.doctors.each do |doctor| %>
+              <div class="bg-gray-800 p-3 rounded-lg border border-gray-700">
+                <div class="text-white font-semibold">
+                  <%= link_to doctor.name, doctor_path(doctor), class: "text-blue-400 hover:underline hover:text-blue-300 transition" %>
+                </div>
+                <div class="text-gray-400 text-sm"><%= doctor.specialization %></div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="text-gray-500 italic">No doctors assigned</div>
+        <% end %>
       </div>
       <div>
-        <div class="text-gray-400 text-xs uppercase tracking-wider mb-1">Nurse</div>
-        <div class="text-white font-semibold">
-          <% if @room.nurse %>
-            <%= link_to @room.nurse.name, nurse_path(@room.nurse), class: "text-blue-400 hover:underline hover:text-blue-300 transition" %>
-            <span class="ml-2 text-gray-400 text-sm">(<%= @room.nurse.specialization %>)</span>
-          <% else %>
-            <span class="text-gray-500">No nurse assigned</span>
-          <% end %>
-        </div>
+        <div class="text-gray-400 text-xs uppercase tracking-wider mb-3">Assigned Nurses</div>
+        <% if @room.nurses.any? %>
+          <div class="space-y-2">
+            <% @room.nurses.each do |nurse| %>
+              <div class="bg-gray-800 p-3 rounded-lg border border-gray-700">
+                <div class="text-white font-semibold">
+                  <%= link_to nurse.name, nurse_path(nurse), class: "text-blue-400 hover:underline hover:text-blue-300 transition" %>
+                </div>
+                <div class="text-gray-400 text-sm"><%= nurse.specialization %></div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="text-gray-500 italic">No nurses assigned</div>
+        <% end %>
       </div>
     </div>
   </section>

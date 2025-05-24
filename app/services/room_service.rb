@@ -16,11 +16,11 @@ class RoomService
   def self.update_room_status(room)
     patient_count = room.patients.count
 
-    new_status = if patient_count >= room.capacity && room.doctor.present?
+    new_status = if patient_count >= room.capacity && room.doctors.any?
                    :occupied
-    elsif patient_count > 0 && room.doctor.nil?
+    elsif patient_count > 0 && room.doctors.empty?
                    :patient_only
-    elsif patient_count == 0 && room.doctor.present?
+    elsif patient_count == 0 && room.doctors.any?
                    :doctor_assigned
     else
                    :available

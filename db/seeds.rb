@@ -66,12 +66,24 @@ puts "Creating rooms..."
   room = Room.create!(
     room_number: "#{room_type[0].upcase}#{i.to_s.rjust(3, '0')}",
     room_type: room_type,
-    doctor_id: [ true, false ].sample ? Doctor.pluck(:id).sample : nil,
     capacity: capacity,
   ) if defined?(Room)
 
-  # Update room status using the service
-  RoomService.update_room_status(room) if room
+  # Assign multiple doctors and nurses to rooms randomly
+  if room
+    # Assign 1-3 doctors randomly
+    doctor_count = rand(1..3)
+    available_doctors = Doctor.all.sample(doctor_count)
+    room.doctors = available_doctors
+
+    # Assign 1-2 nurses randomly
+    nurse_count = rand(1..2)
+    available_nurses = Nurse.all.sample(nurse_count)
+    room.nurses = available_nurses
+
+    # Update room status using the service
+    RoomService.update_room_status(room)
+  end
 end
 
 # Create array of diagnoses (diseases)

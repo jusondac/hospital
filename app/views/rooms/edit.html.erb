@@ -1,125 +1,81 @@
-<div class="max-w-7xl mx-auto pt-10 sm:px-8 lg:px-16 bg-gray-900">
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
   <div class="mb-8">
-    <h1 class="font-bold text-3xl text-white">Edit Room</h1>
+    <h1 class="font-extrabold text-4xl text-white tracking-tight">Edit Room</h1>
+    <p class="mt-2 text-gray-400">Update the room details and staff assignments.</p>
   </div>
-  <%= form_with(model: @room, local: true, html: { class: "space-y-6" }) do |form| %>
-    <% if @room.errors.any? %>
-      <div class="bg-red-900/70 p-4 rounded border border-red-700">
-        <div class="font-medium text-red-300">
-          <%= pluralize(@room.errors.count, "error") %> prohibited this room from being saved:
+  <div class="bg-gray-900 shadow-lg rounded-xl p-8 border border-gray-800">
+    <%= form_with(model: @room, local: true) do |form| %>
+      <% if @room.errors.any? %>
+        <div class="bg-red-900/70 p-4 rounded mb-8 border border-red-700">
+          <div class="font-semibold text-red-300">
+            <%= pluralize(@room.errors.count, "error") %> prohibited this room from being saved:
+          </div>
+          <ul class="mt-3 list-disc list-inside text-sm text-red-200">
+            <% @room.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
         </div>
-        <ul class="mt-3 list-disc list-inside text-sm text-red-200">
-          <% @room.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
+      <% end %>
+      <!-- Basic Room Information -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div>
+          <%= form.label :room_number, class: "block text-sm font-semibold text-gray-200 mb-2" %>
+          <%= form.text_field :room_number, class: "bg-gray-800 border border-gray-700 text-gray-100 placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-lg px-4 py-2 transition" %>
+        </div>
+        <div>
+          <%= form.label :room_type, class: "block text-sm font-semibold text-gray-200 mb-2" %>
+          <%= form.select :room_type, 
+                          options_for_select(Room.room_types.map {|key, value| [key.humanize, key]}, @room.room_type), 
+                          { include_blank: "-- Select Room Type --" }, 
+                          class: "bg-gray-800 border border-gray-700 text-gray-100 focus:ring-indigo-500 focus:border-indigo-500 block w-full px-4 py-2 rounded-lg sm:text-sm transition" %>
+        </div>
+        <div>
+          <%= form.label :capacity, class: "block text-sm font-semibold text-gray-200 mb-2" %>
+          <%= form.number_field :capacity, class: "bg-gray-800 border border-gray-700 text-gray-100 placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-lg px-4 py-2 transition", min: 1 %>
+        </div>
       </div>
-    <% end %>
-    <!-- Room Number, Room Type, and Capacity side by side -->
-    <div class="flex flex-col md:flex-row gap-6">
-      <div class="flex-1">
-        <%= form.label :room_number, class: "block text-sm font-medium text-gray-300 mb-1" %>
-        <%= form.text_field :room_number, class: "focus:ring-indigo-400 focus:border-indigo-400 block w-full sm:text-sm border-0 border-b border-gray-700 bg-transparent text-gray-100 rounded-none placeholder-gray-500 px-0 py-2 transition" %>
-      </div>
-      <div class="flex-1">
-        <%= form.label :room_type, class: "block text-sm font-medium text-gray-300 mb-1" %>
-        <%= form.select :room_type, 
-                        options_for_select(Room.room_types.map {|key, value| [key.humanize, key]}, @room.room_type), 
-                        { include_blank: "-- Select Room Type --" }, 
-                        class: "block w-full border-0 border-b border-gray-700 bg-transparent text-gray-100 focus:ring-indigo-400 focus:border-indigo-400 sm:text-sm rounded-none placeholder-gray-500 px-0 py-2 transition" %>
-      </div>
-      <div class="flex-1">
-        <%= form.label :capacity, class: "block text-sm font-medium text-gray-300 mb-1" %>
-        <%= form.number_field :capacity, class: "focus:ring-indigo-400 focus:border-indigo-400 block w-full sm:text-sm border-0 border-b border-gray-700 bg-transparent text-gray-100 rounded-none placeholder-gray-500 px-0 py-2 transition", min: 1 %>
-      </div>
-    </div>
-    <!-- Drag and Drop Doctor Assignment -->
-    <div data-controller="dragdrop" 
-         data-dragdrop-current-doctor-id-value="<%= @room.doctor_id %>"
-         data-dragdrop-current-doctor-name-value="<%= @room.doctor&.name %>"
-         data-dragdrop-current-nurse-id-value="<%= @room.nurse_id %>"
-         data-dragdrop-current-nurse-name-value="<%= @room.nurse&.name %>">
-      <%= form.label :doctor_id, "Assign Doctor", class: "block text-sm font-medium text-gray-300 mb-3" %>
-      <%= form.hidden_field :doctor_id, data: { dragdrop_target: "hiddenField" } %>
-      <div class="flex flex-col md:flex-row gap-8">
-        <!-- Available Doctors List -->
-        <div class="flex-1">
-          <div class="flex items-center justify-between mb-3">
-            <h4 class="text-sm font-medium text-gray-400">
-              Available Doctors 
-              <span data-dragdrop-target="doctorsCount" class="text-xs text-gray-500">(<%= @doctors.count %>)</span>
-            </h4>
-            <div class="flex gap-2">
-              <button type="button" 
-                      data-action="click->dragdrop#toggleNursesFilter"
-                data-dragdrop-target="nursesFilterBtn"
-                class="px-3 py-1 text-xs bg-purple-600 text-white rounded hover:bg-purple-700 transition">
-                Show with Nurses
-              </button>
-              <button type="button" 
-                      data-action="click->dragdrop#clearFilters"
-                class="px-3 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 transition">
-                Clear
-              </button>
-            </div>
-          </div>
-          <!-- Search Input -->
-          <div class="mb-3">
-            <input type="text" 
-                   placeholder="Search doctor by name..." 
-                   data-dragdrop-target="searchInput"
-                   data-action="input->dragdrop#filterDoctors"
-            class="w-full px-3 py-2 text-sm bg-gray-800 border border-gray-600 rounded text-white placeholder-gray-400 focus:ring-indigo-400 focus:border-indigo-400">
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-h-64 overflow-y-auto pr-2" data-dragdrop-target="doctorsList">
-            <% @doctors.each do |doctor| %>
-              <div class="doctor-card bg-gray-800 p-4 rounded-lg border border-gray-600 cursor-move hover:bg-gray-700 transition"
-                   data-doctor-id="<%= doctor.id %>"
-                   data-doctor-name="<%= doctor.name %>"
-                   data-doctor-specialization="<%= doctor.specialization %>"
-                   data-nurses-count="<%= doctor.nurses.count %>">
-                <div class="text-white font-semibold"><%= doctor.name %></div>
-                <div class="text-gray-400 text-sm"><%= doctor.specialization %></div>
-                <div class="flex items-center justify-between mt-1">
-                  <div class="text-gray-400 text-sm">
-                    <%= doctor.nurses.count %>
-                    <span class="<%= doctor.nurses.count > 0 ? 'text-green-400' : 'text-gray-500' %>">
-                      Nurse<%= doctor.nurses.count != 1 ? 's' : '' %>
-                    </span>
-                  </div>
-                  <% if doctor.nurses.count > 0 %>
-                    <div class="w-2 h-2 bg-green-400 rounded-full"></div>
-                  <% end %>
+      <!-- Staff Assignment -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Doctors Assignment -->
+        <div>
+          <%= form.label :doctor_ids, "Assign Doctors", class: "block text-sm font-semibold text-gray-200 mb-3" %>
+          <div class="bg-gray-800 border border-gray-700 rounded-lg p-4 max-h-64 overflow-y-auto">
+            <%= form.collection_check_boxes :doctor_ids, @doctors, :id, :name, { checked: @room.doctor_ids } do |b| %>
+              <div class="flex items-center space-x-3 mb-3 p-2 hover:bg-gray-700 rounded">
+                <%= b.check_box(class: "h-4 w-4 text-indigo-600 bg-gray-700 border-gray-600 rounded focus:ring-indigo-500") %>
+                <div class="flex-1">
+                  <%= b.label(class: "text-sm text-gray-200 font-medium cursor-pointer") %>
+                  <div class="text-xs text-gray-400"><%= Doctor.find(b.value).specialization %></div>
                 </div>
-                <div class="text-blue-400 text-xs mt-1">Drag to assign</div>
               </div>
             <% end %>
           </div>
-          <!-- No results message -->
-          <div data-dragdrop-target="noResults" class="hidden text-center py-8 text-gray-500">
-            <div class="text-lg mb-2">No doctors found</div>
-            <div class="text-sm">Try adjusting your search criteria</div>
-          </div>
+          <p class="text-xs text-gray-400 mt-2">Select multiple doctors to assign to this room</p>
         </div>
-        <!-- Drop Zone for Selected Doctor -->
-        <div class="flex-1">
-          <h4 class="text-sm font-medium text-gray-400 mb-3">Assigned Doctor</h4>
-          <div data-dragdrop-target="selectedDoctor" class="min-h-[72px] bg-gray-800 border border-gray-600 rounded-lg p-4 flex items-center">
-            <!-- This will be populated by JavaScript -->
+        <!-- Nurses Assignment -->
+        <div>
+          <%= form.label :nurse_ids, "Assign Nurses", class: "block text-sm font-semibold text-gray-200 mb-3" %>
+          <div class="bg-gray-800 border border-gray-700 rounded-lg p-4 max-h-64 overflow-y-auto">
+            <%= form.collection_check_boxes :nurse_ids, @nurses, :id, :name, { checked: @room.nurse_ids } do |b| %>
+              <div class="flex items-center space-x-3 mb-3 p-2 hover:bg-gray-700 rounded">
+                <%= b.check_box(class: "h-4 w-4 text-indigo-600 bg-gray-700 border-gray-600 rounded focus:ring-indigo-500") %>
+                <div class="flex-1">
+                  <%= b.label(class: "text-sm text-gray-200 font-medium cursor-pointer") %>
+                  <div class="text-xs text-gray-400"><%= Nurse.find(b.value).specialization %></div>
+                </div>
+              </div>
+            <% end %>
           </div>
-          <!-- Nurses Info Container -->
-          <div data-dragdrop-target="nursesInfo">
-            <!-- Nurses will be populated here by JavaScript -->
-          </div>
+          <p class="text-xs text-gray-400 mt-2">Select multiple nurses to assign to this room</p>
         </div>
       </div>
-      <p class="text-sm text-gray-500 mt-2">You can drag a doctor from above to assign them, or drag them out to unassign.</p>
-    </div>
-    <div class="flex justify-end">
-      <%= form.submit "Update Room", class: "inline-flex items-center px-6 py-2 border border-indigo-600 text-sm font-semibold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400 transition shadow-none" %>
-    </div>
-  <% end %>
-  <div class="mt-8">
-    <%= link_to "Back to Room", room_path(@room), class: "text-indigo-400 hover:text-indigo-200 font-semibold transition" %>
+      <div class="flex justify-end mt-8">
+        <%= form.submit "Update Room", class: "inline-flex items-center px-6 py-2 border border-transparent text-base font-semibold rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition" %>
+      </div>
+    <% end %>
+  </div>
+  <div class="mt-10 text-center">
+    <%= link_to "← Back to Room", room_path(@room), class: "text-indigo-400 hover:text-indigo-200 font-medium transition" %>
   </div>
 </div>

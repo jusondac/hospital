@@ -1,6 +1,8 @@
 class Doctor < ApplicationRecord
   has_many :nurses
-  has_many :rooms
+  # Many-to-many relationship with rooms
+  has_many :room_doctors, dependent: :destroy
+  has_many :rooms, through: :room_doctors
 
   validates :name, presence: true
   validates :gender, presence: true
