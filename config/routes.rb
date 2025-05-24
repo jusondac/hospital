@@ -31,7 +31,13 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   namespace :api do
+    get "charts/dashboard_stats"
     get "charts/patient_admissions"
+    get "charts/patient_trend"
+    get "charts/room_occupancy"
+    get "charts/patient_conditions"
+    get "charts/staff_workload"
+    get "charts/monthly_trends"
     get "charts/doctor_specialties"
     get "doctors/:id/nurses", to: "doctors#nurses"
     get "nurses/available", to: "nurses#available"
