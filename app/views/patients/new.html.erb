@@ -38,7 +38,10 @@
     </div>
     <div class="mb-6">
       <%= form.label :condition, class: "block text-sm font-medium text-gray-300 mb-2" %>
-      <%= form.text_field :condition, class: "bg-gray-800 text-gray-100 placeholder-gray-500 border border-gray-700 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-lg px-4 py-3 transition" %>
+      <%= form.select :condition, 
+          options_for_select(Patient.conditions.map { |key, value| [key.humanize, key] }), 
+          { include_blank: "-- Select condition --" }, 
+          { class: "bg-gray-800 text-gray-100 border border-gray-700 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-4 pr-10 py-3 text-base sm:text-sm rounded-lg transition" } %>
     </div>
     <div class="mb-6">
       <%= form.label :room_id, "Assign to Room", class: "block text-sm font-medium text-gray-300 mb-2" %>

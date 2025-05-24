@@ -52,7 +52,7 @@
                 <td class="px-4 py-2 text-gray-100 font-medium"><%= room.room_number %></td>
                 <td class="px-4 py-2 text-gray-100"><%= room.room_type.humanize %></td>
                 <td class="px-4 py-2">
-                  <% if room.patient %>
+                  <% if room.patients %>
                     <%= link_to room.patient.name, patient_path(room.patient), class: "text-indigo-400 hover:text-indigo-200 underline" %>
                   <% else %>
                     <span class="text-gray-500">No patient</span>

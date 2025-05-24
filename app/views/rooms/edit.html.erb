@@ -15,7 +15,7 @@
         </ul>
       </div>
     <% end %>
-    <!-- Room Number and Room Type side by side -->
+    <!-- Room Number, Room Type, and Capacity side by side -->
     <div class="flex flex-col md:flex-row gap-6">
       <div class="flex-1">
         <%= form.label :room_number, class: "block text-sm font-medium text-gray-300 mb-1" %>
@@ -27,6 +27,10 @@
                         options_for_select(Room.room_types.map {|key, value| [key.humanize, key]}, @room.room_type), 
                         { include_blank: "-- Select Room Type --" }, 
                         class: "block w-full border-0 border-b border-gray-700 bg-transparent text-gray-100 focus:ring-indigo-400 focus:border-indigo-400 sm:text-sm rounded-none placeholder-gray-500 px-0 py-2 transition" %>
+      </div>
+      <div class="flex-1">
+        <%= form.label :capacity, class: "block text-sm font-medium text-gray-300 mb-1" %>
+        <%= form.number_field :capacity, class: "focus:ring-indigo-400 focus:border-indigo-400 block w-full sm:text-sm border-0 border-b border-gray-700 bg-transparent text-gray-100 rounded-none placeholder-gray-500 px-0 py-2 transition", min: 1 %>
       </div>
     </div>
     <!-- Drag and Drop Doctor Assignment -->

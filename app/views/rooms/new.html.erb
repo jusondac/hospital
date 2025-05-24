@@ -38,6 +38,11 @@
         <%= form.collection_select :nurse_id, @nurses, :id, :name, { include_blank: "-- Select a nurse --" }, class: "bg-gray-800 border border-gray-700 text-gray-100 focus:ring-indigo-500 focus:border-indigo-500 block w-full px-4 py-2 rounded-lg sm:text-sm transition" %>
         <p class="mt-1 text-xs text-gray-400">Optional: You can leave this unassigned</p>
       </div>
+      <div class="mb-7">
+        <%= form.label :capacity, class: "block text-sm font-semibold text-gray-200 mb-2" %>
+        <%= form.number_field :capacity, class: "bg-gray-800 border border-gray-700 text-gray-100 placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-lg px-4 py-2 transition", min: 1, placeholder: "Enter room capacity" %>
+        <p class="mt-1 text-xs text-gray-400">Maximum number of patients this room can accommodate</p>
+      </div>
       <div class="flex justify-end">
         <%= form.submit "Create Room", class: "inline-flex items-center px-6 py-2 border border-transparent text-base font-semibold rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition" %>
       </div>
