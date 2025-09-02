@@ -49,9 +49,9 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
       <div>
         <div class="text-gray-400 text-xs uppercase tracking-wider mb-3">Assigned Doctors</div>
-        <% if @room.doctors.any? %>
+        <% if @room.active_doctors_assigned.any? %>
           <div class="space-y-2">
-            <% @room.doctors.each do |doctor| %>
+            <% @room.active_doctors_assigned.each do |doctor| %>
               <div class="bg-gray-800 p-3 rounded-lg border border-gray-700">
                 <div class="text-white font-semibold">
                   <%= link_to doctor.name, doctor_path(doctor), class: "text-blue-400 hover:underline hover:text-blue-300 transition" %>
@@ -66,9 +66,9 @@
       </div>
       <div>
         <div class="text-gray-400 text-xs uppercase tracking-wider mb-3">Assigned Nurses</div>
-        <% if @room.nurses.any? %>
+        <% if @room.active_nurses_assigned.any? %>
           <div class="space-y-2">
-            <% @room.nurses.each do |nurse| %>
+            <% @room.active_nurses_assigned.each do |nurse| %>
               <div class="bg-gray-800 p-3 rounded-lg border border-gray-700">
                 <div class="text-white font-semibold">
                   <%= link_to nurse.name, nurse_path(nurse), class: "text-blue-400 hover:underline hover:text-blue-300 transition" %>

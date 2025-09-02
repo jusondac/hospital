@@ -10,7 +10,7 @@ class Api::DoctorsController < ApplicationController
           name: nurse.name,
           specialization: nurse.specialization,
           gender: nurse.gender
-        }
+        }w
       end
     }
   rescue ActiveRecord::RecordNotFound

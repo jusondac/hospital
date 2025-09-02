@@ -1,83 +1,93 @@
-<div class="max-w-4xl mx-auto px-4 py-12 bg-gray-900">
+<div class="max-w-screen mx-auto px-10 py-12 bg-gray-900">
   <div class="mb-10">
     <h1 class="text-3xl font-bold text-gray-100 mb-2">Patient Information</h1>
     <p class="text-gray-400 text-base">Personal details and medical information</p>
   </div>
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-12 mb-12">
-    <div>
-      <div class="text-gray-400 text-sm mb-1">Full name</div>
-      <div class="text-gray-100 text-lg font-medium"><%= @patient.name %></div>
-    </div>
-    <div>
-      <div class="text-gray-400 text-sm mb-1">Gender</div>
-      <div class="text-gray-100 text-lg font-medium"><%= @patient.gender %></div>
-    </div>
-    <div>
-      <div class="text-gray-400 text-sm mb-1">Age</div>
-      <div class="text-gray-100 text-lg font-medium"><%= @patient.age %></div>
-    </div>
-    <div>
-      <div class="text-gray-400 text-sm mb-1">Condition</div>
-      <div class="text-gray-100 text-lg font-medium"><%= @patient.condition %></div>
-    </div>
-    <div>
-      <div class="text-gray-400 text-sm mb-1">Diagnosis</div>
-      <div class="text-gray-100 text-lg font-medium"><%= @patient.diagnosis %></div>
-    </div>
-    <div>
-      <div class="text-gray-400 text-sm mb-1">Status</div>
+  <div class="flex">
+    <!--- Patients Information --->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-12 mb-12 w-1/2">
       <div>
-        <% if @patient.recovered? %>
-          <span class="inline-block px-2 py-1 text-xs rounded bg-green-950 text-green-300">Recovered & Discharged</span>
-        <% elsif @patient.assigned_to_room? %>
-          <span class="inline-block px-2 py-1 text-xs rounded bg-blue-950 text-blue-300">Currently Admitted</span>
-        <% else %>
-          <span class="inline-block px-2 py-1 text-xs rounded bg-yellow-950 text-yellow-300">Awaiting Room Assignment</span>
-        <% end %>
+        <div class="text-gray-400 text-sm mb-1">Full name</div>
+        <div class="text-gray-100 text-lg font-medium"><%= @patient.name %></div>
+      </div>
+      <div>
+        <div class="text-gray-400 text-sm mb-1">Gender</div>
+        <div class="text-gray-100 text-lg font-medium"><%= @patient.gender %></div>
+      </div>
+      <div>
+        <div class="text-gray-400 text-sm mb-1">Age</div>
+        <div class="text-gray-100 text-lg font-medium"><%= @patient.age %></div>
+      </div>
+      <div>
+        <div class="text-gray-400 text-sm mb-1">Condition</div>
+        <div class="text-gray-100 text-lg font-medium"><%= @patient.condition %></div>
+      </div>
+      <div>
+        <div class="text-gray-400 text-sm mb-1">Diagnosis</div>
+        <div class="text-gray-100 text-lg font-medium"><%= @patient.diagnosis %></div>
+      </div>
+      <div>
+        <div class="text-gray-400 text-sm mb-1">Status</div>
+        <div>
+          <% if @patient.recovered? %>
+            <span class="inline-block px-2 py-1 text-xs rounded bg-green-950 text-green-300">Recovered & Discharged</span>
+          <% elsif @patient.assigned_to_room? %>
+            <span class="inline-block px-2 py-1 text-xs rounded bg-blue-950 text-blue-300">Currently Admitted</span>
+          <% else %>
+            <span class="inline-block px-2 py-1 text-xs rounded bg-yellow-950 text-yellow-300">Awaiting Room Assignment</span>
+          <% end %>
+        </div>
+      </div>
+      <div>
+        <div class="text-gray-400 text-sm mb-1">Room Assignment</div>
+        <div class="text-gray-100 text-lg font-medium">
+          <% if @patient.room %>
+            <%= link_to "Room #{@patient.room.room_number}", room_path(@patient.room), class: "text-indigo-400 hover:text-indigo-200 underline" %>
+            <span class="ml-2 text-gray-400 text-sm">(<%= @patient.room.room_type.humanize %>)</span>
+          <% else %>
+            <span class="text-gray-500">Not assigned to any room</span>
+          <% end %>
+        </div>
       </div>
     </div>
-    <div>
-      <div class="text-gray-400 text-sm mb-1">Room Assignment</div>
-      <div class="text-gray-100 text-lg font-medium">
-        <% if @patient.room %>
-          <%= link_to "Room #{@patient.room.room_number}", room_path(@patient.room), class: "text-indigo-400 hover:text-indigo-200 underline" %>
-          <span class="ml-2 text-gray-400 text-sm">(<%= @patient.room.room_type.humanize %>)</span>
-        <% else %>
-          <span class="text-gray-500">Not assigned to any room</span>
-        <% end %>
+    <!--- Care Team --->
+    <% if @patient.room %>
+      <div class="mb-10 w-1/2">
+        <h2 class="text-2xl font-semibold text-gray-100 mb-2">Care Team</h2>
+        <p class="text-gray-400 text-base mb-4">Medical staff responsible for this patient</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-12">
+          <div>
+            <div class="text-gray-400 text-sm mb-1">Doctor</div>
+            <div class="text-gray-100 text-lg font-medium flex flex-col">
+              <% if @patient.room.doctors %>
+                <% @patient.room.doctors.each do |doctor| %>
+                  <div class="flex items-center">
+                    <%= link_to doctor.name, doctor_path(doctor), class: "text-indigo-400 hover:text-indigo-200 underline" %>
+                    <span class="ml-2 text-gray-400 text-sm">(<%= doctor.specialization %>)</span>
+                  </div>
+                <% end %>
+              <% else %>
+                <span class="text-gray-500">No doctor assigned</span>
+              <% end %>
+            </div>
+          </div>
+          <div>
+            <div class="text-gray-400 text-sm mb-1">Nurse</div>
+            <div class="text-gray-100 text-lg font-medium flex flex-col">
+              <% if @patient.room.nurses %>
+                <% @patient.room.nurses.each do |nurse| %>
+                  <%= link_to nurse.name, nurse_path(nurse), class: "text-indigo-400 hover:text-indigo-200 underline" %>
+                  <span class="ml-2 text-gray-400 text-sm">(<%= nurse.specialization %>)</span>
+                <% end %>
+              <% else %>
+                <span class="text-gray-500">No nurse assigned</span>
+              <% end %>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    <% end %>
   </div>
-  <% if @patient.room %>
-    <div class="mb-10">
-      <h2 class="text-2xl font-semibold text-gray-100 mb-2">Care Team</h2>
-      <p class="text-gray-400 text-base mb-4">Medical staff responsible for this patient</p>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-12">
-        <div>
-          <div class="text-gray-400 text-sm mb-1">Doctor</div>
-          <div class="text-gray-100 text-lg font-medium">
-            <% if @patient.room.doctor %>
-              <%= link_to @patient.room.doctor.name, doctor_path(@patient.room.doctor), class: "text-indigo-400 hover:text-indigo-200 underline" %>
-              <span class="ml-2 text-gray-400 text-sm">(<%= @patient.room.doctor.specialization %>)</span>
-            <% else %>
-              <span class="text-gray-500">No doctor assigned</span>
-            <% end %>
-          </div>
-        </div>
-        <div>
-          <div class="text-gray-400 text-sm mb-1">Nurse</div>
-          <div class="text-gray-100 text-lg font-medium">
-            <% if @patient.room.nurse %>
-              <%= link_to @patient.room.nurse.name, nurse_path(@patient.room.nurse), class: "text-indigo-400 hover:text-indigo-200 underline" %>
-              <span class="ml-2 text-gray-400 text-sm">(<%= @patient.room.nurse.specialization %>)</span>
-            <% else %>
-              <span class="text-gray-500">No nurse assigned</span>
-            <% end %>
-          </div>
-        </div>
-      </div>
-    </div>
-  <% end %>
   <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
     <%= link_to "Back to Patients", patients_path, class: "text-indigo-400 hover:text-indigo-200 underline text-base" %>
     <div class="flex gap-2">

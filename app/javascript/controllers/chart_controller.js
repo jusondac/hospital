@@ -508,7 +508,7 @@ export default class extends Controller {
           categories: chartData.labels,
           labels: {
             style: {
-              colors: this.isDarkMode() ? '#9CA3AF' : '#6B7280',
+              colors: '#FFFFFF',
               fontSize: '12px'
             }
           }
@@ -516,7 +516,7 @@ export default class extends Controller {
         yaxis: {
           labels: {
             style: {
-              colors: this.isDarkMode() ? '#9CA3AF' : '#6B7280',
+              colors: '#FFFFFF',
               fontSize: '12px'
             }
           }
@@ -530,7 +530,7 @@ export default class extends Controller {
         },
         legend: {
           labels: {
-            colors: this.isDarkMode() ? '#F3F4F6' : '#374151'
+            colors: '#FFFFFF'
           }
         }
       }
@@ -660,7 +660,7 @@ export default class extends Controller {
           categories: chartData.specialties,
           labels: {
             style: {
-              colors: this.isDarkMode() ? '#9CA3AF' : '#6B7280',
+              colors: '#FFFFFF',
               fontSize: '12px'
             }
           }
@@ -668,7 +668,7 @@ export default class extends Controller {
         yaxis: {
           labels: {
             style: {
-              colors: this.isDarkMode() ? '#9CA3AF' : '#6B7280',
+              colors: '#FFFFFF',
               fontSize: '12px'
             }
           }
@@ -682,7 +682,7 @@ export default class extends Controller {
         },
         legend: {
           labels: {
-            colors: this.isDarkMode() ? '#F3F4F6' : '#374151'
+            colors: '#FFFFFF'
           }
         }
       }

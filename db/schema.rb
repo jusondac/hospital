@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_24_121723) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_25_000305) do
   create_table "doctors", force: :cascade do |t|
     t.string "name"
     t.string "gender"
     t.string "specialization"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active"
   end
 
   create_table "nurses", force: :cascade do |t|
@@ -26,6 +27,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_24_121723) do
     t.integer "doctor_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active"
     t.index ["doctor_id"], name: "index_nurses_on_doctor_id"
   end
 
@@ -40,6 +42,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_24_121723) do
     t.date "admission_date"
     t.string "diagnosis"
     t.integer "condition"
+    t.datetime "discharge_date"
     t.index ["room_id"], name: "index_patients_on_room_id"
   end
 
@@ -48,6 +51,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_24_121723) do
     t.integer "doctor_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "start_date"
+    t.datetime "finish_date"
+    t.boolean "active"
     t.index ["doctor_id"], name: "index_room_doctors_on_doctor_id"
     t.index ["room_id", "doctor_id"], name: "index_room_doctors_on_room_id_and_doctor_id", unique: true
     t.index ["room_id"], name: "index_room_doctors_on_room_id"
@@ -58,6 +64,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_24_121723) do
     t.integer "nurse_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "start_date"
+    t.datetime "finish_date"
+    t.boolean "active"
     t.index ["nurse_id"], name: "index_room_nurses_on_nurse_id"
     t.index ["room_id", "nurse_id"], name: "index_room_nurses_on_room_id_and_nurse_id", unique: true
     t.index ["room_id"], name: "index_room_nurses_on_room_id"
@@ -70,6 +79,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_24_121723) do
     t.integer "room_type"
     t.integer "room_status"
     t.integer "capacity"
+    t.index ["room_number"], name: "index_rooms_on_room_number", unique: true
+    t.index ["room_status"], name: "index_rooms_on_room_status"
+    t.index ["room_type", "room_status"], name: "index_rooms_on_room_type_and_room_status"
+    t.index ["room_type"], name: "index_rooms_on_room_type"
   end
 
   create_table "sessions", force: :cascade do |t|

@@ -16,11 +16,11 @@ class RoomService
   def self.update_room_status(room)
     patient_count = room.patients.count
 
-    new_status = if patient_count >= room.capacity && room.doctors.any?
+    new_status = if patient_count >= room.capacity && room.active_doctors_assigned.any?
                    :occupied
-    elsif patient_count > 0 && room.doctors.empty?
+    elsif patient_count > 0 && room.active_doctors_assigned.empty?
                    :patient_only
-    elsif patient_count == 0 && room.doctors.any?
+    elsif patient_count == 0 && room.active_doctors_assigned.any?
                    :doctor_assigned
     else
                    :available
@@ -54,13 +54,29 @@ class RoomService
 
     ActiveRecord::Base.transaction do
       room = patient.room
-      patient.update!(room: nil, condition: :discharged)
+      patient.update!(room: nil, condition: :discharged, discharge_date: DateTime.current)
       update_room_status(room)
+      empty_doctor_and_nurse(room) if room.patients.empty?
       true
     end
   rescue ActiveRecord::RecordInvalid
     false
   end
+
+  def self.empty_doctor_and_nurse(room)
+    ActiveRecord::Base.transaction do
+      return unless room
+
+      # Update all doctors and nurses in the room to inactive
+      room.room_doctors.update_all(active: false, finish_date: DateTime.current)
+
+      # Also update the doctors and nurses directly
+      room.room_doctors.update_all(active: false, finish_date: DateTime.current)
+    end
+  rescue ActiveRecord::RecordInvalid
+    false
+  end
+
 
   def self.room_availability_info(room)
     patient_count = room.patients.count

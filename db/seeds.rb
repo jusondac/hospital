@@ -34,7 +34,7 @@ end
 
 # Create nurses
 puts "Creating nurses..."
-50.times do |i|
+80.times do |i|  # Increased from 50 to 80 nurses
   Nurse.create!(
     name: Faker::Name.name,
     specialization: [ 'Pediatrics', 'Cardiology', 'Neurology', 'Oncology' ].sample,
@@ -51,8 +51,8 @@ end
 
 # Create rooms
 puts "Creating rooms..."
-30.times do |i|
-  # Set capacity based on room type
+60.times do |i|  # Increased from 30 to 60 rooms
+  # Set capacity based on room type with better distribution
   room_type = Room.room_types.keys.sample
   capacity = case room_type
   when 'general_ward' then [ 4, 6, 8 ].sample
@@ -133,15 +133,20 @@ diagnoses = [
 
 # Create patients with admission dates - updated for better chart visualization
 puts "Creating patients..."
-# Create a specific distribution for the weekly chart
-daily_counts = [ 15, 18, 22, 16, 25, 20, 28 ]  # Mon to Sun - reduced counts
 
-# Create patients for the last 7 days with specific counts per day
-7.times do |day_index|
-  day_count = daily_counts[day_index]
-  day_date = Date.today - (6 - day_index).days  # Starting from 6 days ago to today
+# Create more historical data for better visualization (last 30 days)
+30.times do |day_index|
+  # Create a more realistic patient flow
+  base_count = rand(8..15)  # Base number of admissions per day
+  # Add some variation - weekends typically lower, some days higher
+  day_of_week = (Date.today - (29 - day_index).days).wday
+  weekend_modifier = (day_of_week == 0 || day_of_week == 6) ? 0.7 : 1.0
+  random_modifier = rand(0.8..1.3)
 
-  day_count.times do
+  daily_count = (base_count * weekend_modifier * random_modifier).round
+  admission_date = Date.today - (29 - day_index).days
+
+  daily_count.times do
     # Find available rooms that can accommodate more patients
     available_rooms = RoomService.available_rooms
     room = available_rooms.sample
@@ -152,7 +157,7 @@ daily_counts = [ 15, 18, 22, 16, 25, 20, 28 ]  # Mon to Sun - reduced counts
       gender: [ 'Male', 'Female' ].sample,
       condition: Patient.conditions.values.sample,
       blood_type: [ 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-' ].sample,
-      admission_date: day_date,
+      admission_date: admission_date,
       diagnosis: diagnoses.sample,
       room_id: room&.id
     ) if defined?(Patient)
@@ -162,30 +167,39 @@ daily_counts = [ 15, 18, 22, 16, 25, 20, 28 ]  # Mon to Sun - reduced counts
       RoomService.update_room_status(room)
     end
 
-    # Set room to nil if patient is discharged
-    if patient&.discharged?
-      patient.update(room: nil)
+    # Randomly discharge some older patients (20% chance for patients older than 7 days)
+    if patient && admission_date < 7.days.ago && rand < 0.2
+      # Discharge patient with a random discharge date between admission and today
+      discharge_date = admission_date + rand(1..(Date.today - admission_date).to_i).days
+      patient.update!(
+        room: nil,
+        condition: :discharged,
+        discharge_date: discharge_date
+      )
+      RoomService.update_room_status(room) if room
     end
   end
 end
 
-# Create additional patient data for historical records
-# 30.times do
-#   admission_date = Date.today - rand(1..20).days
-#   room = Room.available.sample&.id
+# Create additional discharged patients from earlier periods for more realistic data
+puts "Creating additional discharged patients..."
+50.times do
+  # Create patients from 1-6 months ago who have been discharged
+  admission_date = Faker::Date.between(from: 6.months.ago, to: 1.month.ago)
+  discharge_date = admission_date + rand(1..30).days
 
-#   patient = Patient.create!(
-#     name: Faker::Name.name,
-#     age: rand(1..100),
-#     gender: [ 'Male', 'Female', 'Other' ].sample,
-#     blood_type: [ 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-' ].sample,
-#     admission_date: admission_date,
-#     condition: Patient.conditions.values.sample,
-#     diagnosis: diagnoses.sample,
-#     room_id: room
-#   ) if defined?(Patient)
-#   patient.update(room: nil) if patient.discharged?
-# end
+  Patient.create!(
+    name: Faker::Name.name,
+    age: rand(1..100),
+    gender: [ 'Male', 'Female' ].sample,
+    condition: :discharged,
+    blood_type: [ 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-' ].sample,
+    admission_date: admission_date,
+    discharge_date: discharge_date,
+    diagnosis: diagnoses.sample,
+    room_id: nil
+  ) if defined?(Patient)
+end
 
 puts "Updating room statuses..."
 Room.all.each do |room|

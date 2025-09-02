@@ -1,0 +1,46 @@
+<% @rooms.each do |room| %>
+  <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+    <td class="px-6 py-4 font-bold text-xl text-gray-white dark:text-white"><%= room.room_number %></td>
+    <td class="px-6 py-4">
+      <%= room_type_badge(room) %>
+    </td>
+    <td class="px-6 py-4">
+      <%= capacity_display(room) %>
+    </td>
+    <td class="px-6 py-4">
+      <%= room_status_badge(room) %>
+    </td>
+    <td class="px-6 py-4">
+      <div class="flex items-center gap-2">
+        <span class="text-gray-900 dark:text-white font-medium">
+          <%= room.patients_count_cached %>/<%= room.capacity %>
+        </span>
+        <% if room.patients_count_cached > 0 %>
+          Patients
+        <% else %>
+          <span class="text-gray-400 dark:text-gray-500 text-xs">No patients</span>
+        <% end %>
+      </div>
+    </td>
+    <td class="px-6 py-4">
+      <%= staff_counts_display(room) %>
+    </td>
+    <td class="px-6 py-4">
+      <div class="flex gap-2">
+        <%= link_to room_path(room), class: "px-3 py-2 flex bg-blue-700 hover:bg-blue-600 rounded-lg text-bold gap-2" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+          View
+        <% end %>
+        <%= link_to edit_room_path(room), class: "px-3 py-2 flex bg-blue-700 hover:bg-blue-600 rounded-lg text-bold gap-2" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+          update
+        <% end  %>
+      </div>
+    </td>
+  </tr>
+<% end %>
