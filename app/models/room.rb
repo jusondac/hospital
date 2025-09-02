@@ -7,9 +7,9 @@ class Room < ApplicationRecord
   has_many :patients
 
   # Active staff relationships - only active doctors and nurses
-  has_many :active_room_doctors, -> { where(active: true) }, class_name: 'RoomDoctor'
+  has_many :active_room_doctors, -> { where(active: true) }, class_name: "RoomDoctor"
   has_many :active_doctors_assigned, through: :active_room_doctors, source: :doctor
-  has_many :active_room_nurses, -> { where(active: true) }, class_name: 'RoomNurse'
+  has_many :active_room_nurses, -> { where(active: true) }, class_name: "RoomNurse"
   has_many :active_nurses_assigned, through: :active_room_nurses, source: :nurse
 
   # Virtual attributes for SQL preloaded counts
@@ -156,7 +156,7 @@ class Room < ApplicationRecord
   def deactivate_doctor(doctor)
     room_doctor = room_doctors.find_by(doctor: doctor)
     return false unless room_doctor
-    
+
     room_doctor.update(active: false, finish_date: DateTime.current)
     clear_count_memos
     true
@@ -164,7 +164,7 @@ class Room < ApplicationRecord
 
   def activate_nurse(nurse)
     return false unless nurse.gender == "female"
-    
+
     room_nurse = room_nurses.find_or_create_by(nurse: nurse)
     room_nurse.update(active: true, start_date: DateTime.current, finish_date: nil)
     clear_count_memos
@@ -173,7 +173,7 @@ class Room < ApplicationRecord
   def deactivate_nurse(nurse)
     room_nurse = room_nurses.find_by(nurse: nurse)
     return false unless room_nurse
-    
+
     room_nurse.update(active: false, finish_date: DateTime.current)
     clear_count_memos
     true

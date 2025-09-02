@@ -54,7 +54,7 @@ class RoomsController < ApplicationController
       # Assign doctors and nurses using the assign_staff method that handles active status
       doctors = params[:room][:doctor_ids].present? ? Doctor.where(id: params[:room][:doctor_ids]) : []
       nurses = params[:room][:nurse_ids].present? ? Nurse.where(id: params[:room][:nurse_ids]) : []
-      
+
       if doctors.any? || nurses.any?
         @room.assign_staff(doctors, nurses)
       end
@@ -79,7 +79,7 @@ class RoomsController < ApplicationController
       # Update doctor and nurse associations using assign_staff method that handles active status
       doctors = params[:room][:doctor_ids].present? ? Doctor.where(id: params[:room][:doctor_ids]) : []
       nurses = params[:room][:nurse_ids].present? ? Nurse.where(id: params[:room][:nurse_ids]) : []
-      
+
       # Always call assign_staff to update active status (it will deactivate current staff if empty arrays)
       @room.assign_staff(doctors, nurses)
 

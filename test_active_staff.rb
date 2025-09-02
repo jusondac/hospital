@@ -12,7 +12,7 @@ puts "\n1. Testing Room model associations:"
 room = Room.first
 if room
   puts "✓ Room found: #{room.room_number}"
-  
+
   # Test active associations
   begin
     active_doctors = room.active_doctors_assigned
@@ -20,14 +20,14 @@ if room
   rescue => e
     puts "✗ active_doctors_assigned method failed: #{e.message}"
   end
-  
+
   begin
     active_nurses = room.active_nurses_assigned
     puts "✓ active_nurses_assigned method works: #{active_nurses.count} active nurses"
   rescue => e
     puts "✗ active_nurses_assigned method failed: #{e.message}"
   end
-  
+
   # Test convenience methods
   begin
     room.respond_to?(:activate_doctor) ? puts("✓ activate_doctor method exists") : puts("✗ activate_doctor method missing")
@@ -47,7 +47,7 @@ if room_doctor
   puts "  - Active: #{room_doctor.active}"
   puts "  - Has activated_at: #{room_doctor.respond_to?(:activated_at)}"
   puts "  - Has deactivated_at: #{room_doctor.respond_to?(:deactivated_at)}"
-  
+
   # Test scopes
   begin
     active_count = RoomDoctor.active.count
@@ -68,7 +68,7 @@ if room_nurse
   puts "  - Active: #{room_nurse.active}"
   puts "  - Has activated_at: #{room_nurse.respond_to?(:activated_at)}"
   puts "  - Has deactivated_at: #{room_nurse.respond_to?(:deactivated_at)}"
-  
+
   # Test scopes
   begin
     active_count = RoomNurse.active.count
@@ -88,9 +88,9 @@ doctor = Doctor.first
 if room && doctor
   begin
     puts "Testing assign_staff with doctor #{doctor.id}"
-    room.assign_staff(doctors: [doctor])
+    room.assign_staff(doctors: [ doctor ])
     puts "✓ assign_staff method works"
-    
+
     # Check if the assignment is active
     assignment = room.room_doctors.find_by(doctor: doctor)
     if assignment && assignment.active?
